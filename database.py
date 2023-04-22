@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine, text
+import os
 
-db_connection_string = "mysql+pymysql://0q7vq7ftm0fs4damnf6d:pscale_pw_RXvZNRVGx2ixvfZbhU70XerZVp1IXLquIbLOGu8eHS5@aws.connect.psdb.cloud/joviancareers?charset=utf8mb4"
+db_connection_string = os.environ['DB_CONNECTION_STRING']
 
 engine = create_engine(db_connection_string,
                        connect_args={"ssl": {
@@ -14,6 +15,7 @@ engine = create_engine(db_connection_string,
 #  for row in result.all():
 #    result_dict.append(dict(row))
 #  print(result_dict)
+
 
 def load_jobs_from_db():
   with engine.connect() as conn:
