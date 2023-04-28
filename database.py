@@ -8,36 +8,19 @@ engine = create_engine(db_connection_string,
                          "ssl_ca": "/etc/ssl/cert.pem"
                        }})
 
-#with engine.connect() as conn:
-#  result = conn.execute(text("select * from jobs"))
-#  print(result.all())
-#  result_dict = []
-#  for row in result.all():
-#    result_dict.append(dict(row))
-#  print(result_dict)
-
 
 def load_jobs_from_db():
   with engine.connect() as conn:
     result = conn.execute(text("select * from jobs"))
-  jobs = []
-  for row in result.all():
-    #jobs.append(dict(row))
-    jobs.append(row._mapping)
+  jobs = result.mappings().all()
   return jobs
+
 
 def load_job_from_db(id):
   with engine.connect() as conn:
-    result = conn.execute(
-      text(f"select * from jobs where id = :val"),
-      {"val": id}
-    )
-    #result = conn.execute(text(f"select * from jobs where id = {id}"))
-  jobs = []
-  for row in result.all():
-    jobs.append(row._mapping)
+    result = conn.execute(text(f"select * from jobs where id = {id}"))
+  jobs = result.mappings().all()
   if len(jobs) == 0:
     return None
   else:
     return dict(jobs[0])
-    
